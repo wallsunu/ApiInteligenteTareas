@@ -1,0 +1,21 @@
+Comentario,Sentimiento
+La tarea fue completada correctamente,true
+El sistema funciona de manera excelente,true
+Todas las tareas se procesaron sin errores,true
+El rendimiento del sistema es muy bueno,true
+La interfaz es clara y fácil de usar,true
+Las tareas se asignan correctamente,true
+El sistema respondió rápido y sin fallas,true
+Me gusta cómo se organizan las tareas,true
+El proceso de creación de tareas es sencillo,true
+Las notificaciones funcionan perfectamente,true
+El sistema tuvo una falla grave al procesar las tareas,false
+No se pudo completar la tarea por un error interno,false
+El sistema está muy lento y no responde,false
+Hay errores constantes al intentar guardar las tareas,false
+El sistema falló al actualizar el estado de la tarea,false
+La aplicación se cae frecuentemente,false
+No se pueden eliminar las tareas correctamente,false
+El sistema muestra datos incorrectos en las tareas,false
+Las tareas no se guardan después de crearlas,false
+Hubo un error crítico y se perdieron todas las tareas,false
