@@ -19,9 +19,46 @@ public class TareasController : ControllerBase
 
     // GET /api/tareas
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(
+        [FromQuery] string? estado,
+        [FromQuery] string? prioridad,
+        [FromQuery] DateTime? fechaInicio,
+        [FromQuery] DateTime? fechaFin)
     {
-        var tareas = await _context.Tareas.OrderBy(t => t.Id).ToListAsync();
+        EstadoTarea? estadoFiltro = null;
+        if (estado is not null)
+        {
+            if (!Enum.TryParse<EstadoTarea>(estado, ignoreCase: true, out var estadoParsed))
+                return BadRequest($"El valor de estado '{estado}' no es válido. Valores permitidos: {string.Join(", ", Enum.GetNames<EstadoTarea>())}.");
+            estadoFiltro = estadoParsed;
+        }
+
+        PrioridadTarea? prioridadFiltro = null;
+        if (prioridad is not null)
+        {
+            if (!Enum.TryParse<PrioridadTarea>(prioridad, ignoreCase: true, out var prioridadParsed))
+                return BadRequest($"El valor de prioridad '{prioridad}' no es válido. Valores permitidos: {string.Join(", ", Enum.GetNames<PrioridadTarea>())}.");
+            prioridadFiltro = prioridadParsed;
+        }
+
+        if (fechaInicio.HasValue && fechaFin.HasValue && fechaInicio > fechaFin)
+            return BadRequest("fechaInicio no puede ser mayor que fechaFin.");
+
+        var query = _context.Tareas.AsQueryable();
+
+        if (estadoFiltro.HasValue)
+            query = query.Where(t => t.Estado == estadoFiltro.Value);
+
+        if (prioridadFiltro.HasValue)
+            query = query.Where(t => t.Prioridad == prioridadFiltro.Value);
+
+        if (fechaInicio.HasValue)
+            query = query.Where(t => t.FechaVencimiento >= fechaInicio.Value);
+
+        if (fechaFin.HasValue)
+            query = query.Where(t => t.FechaVencimiento <= fechaFin.Value);
+
+        var tareas = await query.OrderBy(t => t.Id).ToListAsync();
         return Ok(tareas);
     }
 
